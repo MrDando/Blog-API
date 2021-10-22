@@ -1,4 +1,5 @@
 import express from 'express'
+import mongoose from 'mongoose'
 
 import userRouter from './routes/user.router'
 import postRouter from './routes/post.router'
@@ -9,6 +10,21 @@ require('dotenv').config()
 const PORT = process.env.PORT
 
 const app = express()
+
+// -------------- DATABASE ----------------
+
+const dbURL = process.env.DB_STRING;
+
+if (typeof dbURL === 'string') {
+    mongoose.connect(dbURL)
+    .then(() => {
+        console.log('Connected to MongoDB')
+    })
+    .catch((err) => {
+        console.log(err)
+    })
+}
+
 
 // -------------- ROUTES ----------------
 

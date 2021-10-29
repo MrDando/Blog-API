@@ -1,10 +1,11 @@
 import { NextFunction, Request, Response } from "express"
 
-import { signUpValidationSchema, ValidateResults } from '../services/user.service'
+import { signUpValidationSchema, ValidateResults, createUser } from '../services/user.service'
 
 export const signup = [
     ...signUpValidationSchema,
-    ValidateResults
+    ValidateResults,
+    createUser
 ]
 
 export function login (req: Request, res: Response) {

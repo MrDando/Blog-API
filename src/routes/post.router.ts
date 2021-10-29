@@ -4,41 +4,23 @@ import * as commentController from '../controllers/comment.controller'
 
 const router = express.Router();
 
-router.get('/', (req: Request, res: Response) => {
-    postController.getPosts(req, res)
-})
+router.get('/', postController.getPosts)
 
-router.post('/', (req: Request, res: Response) => {
-    postController.createPost(req, res)
-})
+router.post('/', postController.createPost)
 
-router.get('/:postid', (req: Request, res: Response) => {
-    postController.getSinglePost(req, res)
-})
+router.get('/:postid', postController.getSinglePost)
 
-router.put('/:postid', (req: Request, res: Response) => {
-    postController.updatePost(req, res)
-})
+router.put('/:postid', postController.updatePost)
 
-router.delete('/:postid', (req: Request, res: Response) => {
-    postController.deletePost(req, res)
-})
+router.delete('/:postid', postController.deletePost)
 
-router.get('/:postid/comments', (req: Request, res: Response) => {
-    commentController.getComments(req, res)
-})
+router.get('/:postid/comments', commentController.getComments)
 
-router.post('/:postid/comments', (req: Request, res: Response) => {
-    commentController.createComment(req, res)
-})
+router.post('/:postid/comments', commentController.createComment)
 
-router.put('/:postid/comments/:commentid', (req: Request, res: Response) => {
-    commentController.editComment(req, res)
-})
+router.put('/:postid/comments/:commentid', commentController.editComment)
 
-router.delete('/:postid/comments/:commentid', (req: Request, res: Response) => {
-    commentController.deleteComment(req, res)
-})
+router.delete('/:postid/comments/:commentid', commentController.deleteComment)
 
 
 

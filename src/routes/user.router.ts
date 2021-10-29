@@ -3,17 +3,11 @@ import * as userController from '../controllers/user.controller'
 
 const router = express.Router();
 
-router.get('/signup', (req: Request, res: Response) => {
-    userController.signup(req, res)
-})
+router.get('/signup', userController.signup)
 
-router.get('/login', (req: Request, res: Response) => {
-    userController.login(req, res)
-})
+router.get('/login', userController.login)
 
-router.get('/logout', (req: Request, res: Response) => {
-    userController.logout(req, res)
-})
+router.get('/logout', userController.logout)
 
 
 export default router

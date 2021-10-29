@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction} from 'express'
 import { body ,validationResult } from 'express-validator'
+import bcryptjs from 'bcryptjs'
 
 import User from '../models/user.model'
 
@@ -41,11 +42,13 @@ export const ValidateResults = function (req: Request, res: Response, next: Next
 }
 
 export const createUser = function (req: Request, res: Response, next: NextFunction) {
+    const hash = bcryptjs.hashSync(req.body.password, 12)
+
     const user = new User({
         username: req.body.username,
-        hash: req.body.password, // TODO Password hashing
+        hash: hash,
     })
-
+    
     user.save((err: Error) => {
         if (err) { return next (err) }
 

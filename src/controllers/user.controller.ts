@@ -1,9 +1,11 @@
 import { Request, Response, NextFunction} from 'express'
 import { body } from 'express-validator'
+import jwt from 'jsonwebtoken'
 
 import User from '../models/user.model'
 import validateResults from '../middleware/validateResults'
 import createUser from '../middleware/createUser'
+import { authenticateUser } from '../services/user.service'
 
 export const signup = [
     body('username')
@@ -34,9 +36,31 @@ export const signup = [
     createUser
 ]
 
-export function login (req: Request, res: Response) {
-    res.send('login test')
-}
+export const login = [
+    async function (req: Request, res: Response, next: NextFunction) {
+        let { username, password } = req.body;
+        let opts = {
+            expiresIn: 60 * 60 * 24 * 365
+        }
+        const [ error, user, message ] = await authenticateUser(username, password)
+        if (error) {
+            next(error)
+        } else {
+            if (user) {
+                const secret = process.env.ACCESS_TOKEN_SECRET
+                if (typeof secret !== 'undefined') {
+                    const token = jwt.sign({ username }, secret, opts);
+                    return res.status(200).json({
+                        message: "Auth Passed",
+                        token
+                    })
+                }
+            }
+    
+            return res.status(401).json({ message })
+        }
+    }
+]
 
 export function logout (req: Request, res: Response) {
     res.send('logout test')

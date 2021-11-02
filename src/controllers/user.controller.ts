@@ -40,7 +40,7 @@ export const login = [
     async function (req: Request, res: Response, next: NextFunction) {
         let { username, password } = req.body;
         let opts = {
-            expiresIn: 60 * 60 * 24 * 365
+            expiresIn: "7d"
         }
         const [ error, user, message ] = await authenticateUser(username, password)
         if (error) {

@@ -47,9 +47,14 @@ export const login = [
             next(error)
         } else {
             if (user) {
+                const userJWTData = {
+                    sub: user.username,
+                    admn: user.isAdmin,
+                    crtr: user.isCreator
+                }
                 const secret = process.env.ACCESS_TOKEN_SECRET
                 if (typeof secret !== 'undefined') {
-                    const token = jwt.sign({ username }, secret, opts);
+                    const token = jwt.sign( userJWTData, secret, opts);
                     return res.status(200).json({
                         message: "Auth Passed",
                         token

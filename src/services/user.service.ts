@@ -15,7 +15,7 @@ export async function authenticateUser(username: string, inputPassword: string) 
             return [null, user];
         }
 
-    } catch (error) {
+    } catch (error: any) {
         return [error, false, { message: 'Server error while connecting to database'}]
     }
 }

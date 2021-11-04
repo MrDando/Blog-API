@@ -16,7 +16,3 @@ export const login = [
     validateResults,
     handleUserLogin
 ]
-
-export function logout (req: Request, res: Response) {
-    res.send('logout test')
-}

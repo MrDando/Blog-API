@@ -14,21 +14,20 @@ export async function handleCreatePost (req: Request, res: Response, next: NextF
     const JWTData = res.locals.user
     const user = await User.findOne({ username: JWTData.sub })
     if (!user) { return res.status(403).json({ message: 'Error validating token' })}
-    if (user && !user.isCreator) {
+    if (!user.isCreator) {
         return res.status(403).json({ message: 'User not authorized to create posts'});
     }
-    if (user) {
-        const post = new Post({
-            title: req.body.title,
-            text: req.body.text,
-            author: user._id,
-            isPublished: req.body.isPublished
-        })
-
-        post.save((err: any) => {
-            if (err) { return next (err) }
     
-            res.status(201).send('Post created successfully')
-        })
-    }
+    const post = new Post({
+        title: req.body.title,
+        text: req.body.text,
+        author: user._id,
+        isPublished: req.body.isPublished
+    })
+
+    post.save((err: any) => {
+        if (err) { return next (err) }
+
+        res.status(201).send('Post created successfully')
+    })
 }

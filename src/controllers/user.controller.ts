@@ -4,7 +4,7 @@ import jwt from 'jsonwebtoken'
 import validateResults from '../middleware/validateResults'
 import handleCreateUser from '../middleware/handleCreateUser'
 import { authenticateUser } from '../services/user.service'
-import { signupValidationSchema } from '../schemas/user.schemas'
+import { signupValidationSchema, loginValidationSchema } from '../schemas/user.schemas'
 
 export const signup = [
     (signupValidationSchema as any),
@@ -13,6 +13,8 @@ export const signup = [
 ]
 
 export const login = [
+    (loginValidationSchema as any),
+    validateResults,
     async function (req: Request, res: Response, next: NextFunction) {
         let { username, password } = req.body;
         let opts = {

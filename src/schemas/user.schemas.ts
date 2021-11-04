@@ -61,3 +61,24 @@ export const signupValidationSchema = checkSchema({
         }
     }
 })
+
+export const loginValidationSchema = checkSchema({
+    username: {
+        in: ['body'],
+        exists: {
+            errorMessage: 'Username is required',
+            options: { checkFalsy: true },
+        },
+        trim: {},
+        escape: {}
+    },
+    password: {
+        in: ['body'],
+        exists: {
+            errorMessage: 'Password is required',
+            options: { checkFalsy: true },
+        },
+        trim: {},
+        escape: {}
+    }
+})

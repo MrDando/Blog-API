@@ -1,5 +1,3 @@
-import { Request, Response, NextFunction} from 'express'
-
 import validateResults from '../middleware/validateResults'
 import handleCreateUser from '../middleware/handleCreateUser'
 import handleUserLogin from '../middleware/handleUserLogin'

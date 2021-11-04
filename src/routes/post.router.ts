@@ -1,7 +1,7 @@
-import express, { Request, Response } from 'express'
+import express from 'express'
 import * as postController from '../controllers/post.controller'
 import * as commentController from '../controllers/comment.controller'
-import authorizeUser, { } from '../middleware/authorizeUser'
+import authorizeUser from '../middleware/authorizeUser'
 
 const router = express.Router();
 

@@ -1,37 +1,13 @@
 import { Request, Response, NextFunction} from 'express'
-import { body } from 'express-validator'
 import jwt from 'jsonwebtoken'
 
-import User from '../models/user.model'
 import validateResults from '../middleware/validateResults'
 import handleCreateUser from '../middleware/handleCreateUser'
 import { authenticateUser } from '../services/user.service'
+import { signupValidationSchema } from '../schemas/user.schemas'
 
 export const signup = [
-    body('username')
-        .exists({checkFalsy: true}).withMessage('Username is required').bail()
-        .isAlphanumeric().withMessage('Username can only contain letters and numbers')
-        .isLength({ min: 3}).withMessage('Username must contain at least 3 characters')
-        .custom((username) => {
-            return User.findOne({ username: username }).then((user) => {
-                if (user) {
-                    throw new Error('Username is not available');
-                }
-            })
-        }).withMessage('Username already exists')
-        .trim()
-        .escape(),
-    body('password')
-        .exists({checkFalsy: true}).withMessage('Password is required').bail()
-        .isAlphanumeric().withMessage('Password can only contain letters and numbers')
-        .isLength({ min: 5}).withMessage('Password must contain at least 5 characters')
-        .trim()
-        .escape(),
-    body('password-confirm')
-        .exists({checkFalsy: true}).withMessage('Password confirmations is required').bail()
-        .custom((value, { req }) => value === req.body.password).withMessage('Passwords do not match').bail()
-        .trim()
-        .escape(),
+    (signupValidationSchema as any),
     validateResults,
     handleCreateUser
 ]

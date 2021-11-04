@@ -1,26 +1,27 @@
 import express, { Request, Response } from 'express'
 import * as postController from '../controllers/post.controller'
 import * as commentController from '../controllers/comment.controller'
+import authorizeUser, { } from '../middleware/authorizeUser'
 
 const router = express.Router();
 
 router.get('/', postController.getPosts)
 
-router.post('/', postController.createPost)
+router.post('/', authorizeUser, postController.createPost)
 
 router.get('/:postid', postController.getSinglePost)
 
-router.put('/:postid', postController.updatePost)
+router.put('/:postid', authorizeUser, postController.updatePost)
 
-router.delete('/:postid', postController.deletePost)
+router.delete('/:postid', authorizeUser, postController.deletePost)
 
 router.get('/:postid/comments', commentController.getComments)
 
-router.post('/:postid/comments', commentController.createComment)
+router.post('/:postid/comments', authorizeUser, commentController.createComment)
 
-router.put('/:postid/comments/:commentid', commentController.editComment)
+router.put('/:postid/comments/:commentid', authorizeUser, commentController.editComment)
 
-router.delete('/:postid/comments/:commentid', commentController.deleteComment)
+router.delete('/:postid/comments/:commentid', authorizeUser, commentController.deleteComment)
 
 
 

@@ -2,7 +2,7 @@ import { Request, Response, NextFunction} from 'express'
 import jwt from 'jsonwebtoken'
 
 import User from '../models/user.model'
-import { authenticateUser } from '../services/user.service'
+import authenticateUser from './utils/authenticateUser'
 import extractJWT from './utils/extractJWT'
 
 export const handleUserCreate = function (req: Request, res: Response, next: NextFunction) {

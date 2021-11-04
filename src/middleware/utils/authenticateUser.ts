@@ -1,6 +1,6 @@
-import User from '../models/user.model'
+import User from '../../models/user.model'
 
-export async function authenticateUser(username: string, inputPassword: string) {
+export default async function authenticateUser(username: string, inputPassword: string) {
     try {
         const user = await User.findOne({ username })
 

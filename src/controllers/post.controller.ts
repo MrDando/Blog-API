@@ -2,11 +2,12 @@ import { NextFunction, Request, Response } from "express";
 
 import { createPostValidationSchema } from '../schemas/post.schemas'
 import validateResults from '../middleware/validateResults'
+import handleGetPosts from '../middleware/handleGetPosts'
 import handleCreatePost from '../middleware/handleCreatePost'
 
-export function getPosts(req: Request, res: Response) {
-    res.send('Get Posts not implemented')
-}
+export const getPosts = [
+    handleGetPosts
+]
 export function getSinglePost(req: Request, res: Response) {
     res.send('Get single post not implemented')
 }

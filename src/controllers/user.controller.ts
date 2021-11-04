@@ -4,7 +4,7 @@ import jwt from 'jsonwebtoken'
 
 import User from '../models/user.model'
 import validateResults from '../middleware/validateResults'
-import createUser from '../middleware/createUser'
+import handleCreateUser from '../middleware/handleCreateUser'
 import { authenticateUser } from '../services/user.service'
 
 export const signup = [
@@ -33,7 +33,7 @@ export const signup = [
         .trim()
         .escape(),
     validateResults,
-    createUser
+    handleCreateUser
 ]
 
 export const login = [

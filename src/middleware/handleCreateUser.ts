@@ -2,7 +2,7 @@ import { Request, Response, NextFunction} from 'express'
 
 import User from '../models/user.model'
 
-const createUser = function (req: Request, res: Response, next: NextFunction) {
+const handleCreateUser = function (req: Request, res: Response, next: NextFunction) {
 
     const user = new User({
         username: req.body.username,
@@ -16,4 +16,4 @@ const createUser = function (req: Request, res: Response, next: NextFunction) {
     })
 }
 
-export default createUser 
+export default handleCreateUser 

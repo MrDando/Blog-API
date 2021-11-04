@@ -2,8 +2,7 @@ import { NextFunction, Request, Response } from "express";
 
 import { createPostValidationSchema } from '../schemas/post.schemas'
 import validateResults from '../middleware/validateResults'
-import handleGetPosts from '../middleware/handleGetPosts'
-import handleCreatePost from '../middleware/handleCreatePost'
+import { handleGetPosts, handleCreatePost } from '../middleware/postMiddleware'
 
 export const getPosts = [
     handleGetPosts

@@ -1,12 +1,11 @@
 import validateResults from '../middleware/validateResults'
-import handleCreateUser from '../middleware/handleCreateUser'
-import handleUserLogin from '../middleware/handleUserLogin'
+import { handleUserCreate, handleUserLogin } from '../middleware/userMiddleware'
 import { signupValidationSchema, loginValidationSchema } from '../schemas/user.schemas'
 
 export const signup = [
     (signupValidationSchema as any),
     validateResults,
-    handleCreateUser
+    handleUserCreate
 ]
 
 export const login = [

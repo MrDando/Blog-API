@@ -10,6 +10,15 @@ export async function handleGetPosts(req: Request, res: Response, next: NextFunc
     res.send(posts)
 }
 
+export async function handleGetSinglePost(req: Request, res: Response, next: NextFunction) {
+        try {
+            const post = await Post.findOne({ postLink: req.params.postLink }).populate('author', 'username')
+            return res.send(post)
+        } catch (err){
+            return next (err)
+        }
+}
+
 export async function handleCreatePost (req: Request, res: Response, next: NextFunction) {
     const JWTData = res.locals.user
     const user = await User.findOne({ username: JWTData.sub })

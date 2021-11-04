@@ -9,7 +9,7 @@ router.get('/', postController.getPosts)
 
 router.post('/', authorizeUser, postController.createPost)
 
-router.get('/:postid', postController.getSinglePost)
+router.get('/:postLink', postController.getSinglePost)
 
 router.put('/:postid', authorizeUser, postController.updatePost)
 

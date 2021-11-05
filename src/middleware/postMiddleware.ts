@@ -13,7 +13,7 @@ export async function handleGetPosts(req: Request, res: Response, next: NextFunc
 
 export async function handleGetSinglePost(req: Request, res: Response, next: NextFunction) {
         try {
-            const post = await Post.findOne({ postLink: req.params.postLink }).populate('author', 'username')
+            const post = await Post.findById(req.params.postid).populate('author', 'username')
             return res.send(post)
         } catch (err){
             return next (ApiError.internal('Internal server error'))

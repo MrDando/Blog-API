@@ -3,6 +3,7 @@ import mongoose from 'mongoose'
 
 import userRouter from './routes/user.router'
 import postRouter from './routes/post.router'
+import apiErrorHandler from './errors/APIErrorHandler'
 
 
 require('dotenv').config()
@@ -33,5 +34,8 @@ if (typeof dbURL === 'string') {
 app.use('/api/v1/users', userRouter);
 app.use('/api/v1/posts', postRouter)
 
+// -------------- ERROR HANDLER ----------------
+
+app.use(apiErrorHandler)
 
 app.listen(PORT, () => console.log(`Server started on port ${PORT}`))

@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from 'express'
 
 import User from '../models/user.model'
 import Post from '../models/post.model'
+import ApiError from '../errors/APIError'
 
 export async function handleGetPosts(req: Request, res: Response, next: NextFunction) {
 
@@ -15,17 +16,15 @@ export async function handleGetSinglePost(req: Request, res: Response, next: Nex
             const post = await Post.findOne({ postLink: req.params.postLink }).populate('author', 'username')
             return res.send(post)
         } catch (err){
-            return next (err)
+            return next (ApiError.internal('Internal server error'))
         }
 }
 
 export async function handleCreatePost (req: Request, res: Response, next: NextFunction) {
     const JWTData = res.locals.user
     const user = await User.findOne({ username: JWTData.sub })
-    if (!user) { return res.status(403).json({ message: 'Error validating token' })}
-    if (!user.isCreator) {
-        return res.status(403).json({ message: 'User not authorized to create posts'});
-    }
+    if (!user) { return next(ApiError.forbidden('Error validating token'))}
+    if (!user.isCreator) { return next(ApiError.forbidden('User not authorized to create posts'))}
     
     const post = new Post({
         title: req.body.title,
@@ -35,7 +34,7 @@ export async function handleCreatePost (req: Request, res: Response, next: NextF
     })
 
     post.save((err: any) => {
-        if (err) { return next (err) }
+        if (err) { return next (ApiError.internal('Internal server error')) }
 
         res.status(201).send('Post created successfully')
     })

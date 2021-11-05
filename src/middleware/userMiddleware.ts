@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction} from 'express'
 import jwt from 'jsonwebtoken'
+import ApiError from '../errors/APIError'
 
 import User from '../models/user.model'
 import authenticateUser from './utils/authenticateUser'
@@ -13,7 +14,7 @@ export const handleUserCreate = function (req: Request, res: Response, next: Nex
     })
     
     user.save((err: any) => {
-        if (err) { return next (err) }
+        if (err) { return next (ApiError.internal('Internal server error')) }
 
         res.status(201).send('User created successfully')
     })
@@ -47,14 +48,14 @@ export async function handleUserLogin (req: Request, res: Response, next: NextFu
 export function authorizeUser(req: Request, res: Response, next: NextFunction) {
     const token = extractJWT(req)
     if (!token) {
-       return res.status(401).json({ message: 'Please login to access this page'})
+        return next(ApiError.unauthorized('Please login to access this page'))
     }
 
     const secret = process.env.ACCESS_TOKEN_SECRET
     if (typeof secret !== 'undefined') {
         jwt.verify(token, secret, (err, authData) => {
             if(err) {
-                return res.status(403).json({ message: 'Token is invalid'});
+                return next(ApiError.forbidden('Token is invalid'))
             }
             res.locals.user = authData
             next()

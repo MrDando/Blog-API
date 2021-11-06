@@ -6,12 +6,11 @@ import postRouter from './routes/post.router'
 import notFoundErrorHandler from './errors/notFoundErrorHandler'
 import apiErrorHandler from './errors/APIErrorHandler'
 
-
-require('dotenv').config()
-
-const PORT = process.env.PORT
+import { config as dotnevConfig } from 'dotenv'
 
 const app = express()
+dotnevConfig()
+const PORT = process.env.PORT
 
 app.use(express.json())
 

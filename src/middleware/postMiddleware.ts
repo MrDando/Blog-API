@@ -39,3 +39,9 @@ export async function handleCreatePost (req: Request, res: Response, next: NextF
         res.status(201).send('Post created successfully')
     })
 }
+
+export function checkPostIdValidity(req: Request, res: Response, next: NextFunction) {
+    const id = req.params.postid
+    if (!id.match(/^[0-9a-fA-F]{24}$/)) { return next(ApiError.badRequest('Invalid post id')) }
+    next()
+}

@@ -2,12 +2,13 @@ import { NextFunction, Request, Response } from "express";
 
 import { createPostValidationSchema } from '../schemas/post.schemas'
 import validateResults from '../middleware/validateResults'
-import { handleGetPosts, handleCreatePost, handleGetSinglePost } from '../middleware/postMiddleware'
+import { checkPostIdValidity, handleGetPosts, handleCreatePost, handleGetSinglePost } from '../middleware/postMiddleware'
 
 export const getPosts = [
     handleGetPosts
 ]
 export const getSinglePost = [
+    checkPostIdValidity,
     handleGetSinglePost
 ]
 export const createPost = [

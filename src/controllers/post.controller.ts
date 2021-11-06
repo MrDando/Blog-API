@@ -2,7 +2,7 @@ import { NextFunction, request, Request, Response } from "express";
 
 import { createPostValidationSchema, updatePostValidationSchema } from '../schemas/post.schemas'
 import validateResults from '../middleware/validateResults'
-import { checkIfAuthorized } from '../middleware/userMiddleware'
+import { authorizeUser, checkIfAuthorized } from '../middleware/userMiddleware'
 import { checkPostIdValidity, handleGetPosts, handleCreatePost, handleGetSinglePost } from '../middleware/postMiddleware'
 import ApiError from "../errors/APIError";
 
@@ -16,12 +16,14 @@ export const getSinglePost = [
     handleGetSinglePost
 ]
 export const createPost = [
+    authorizeUser,
     (createPostValidationSchema as any),
     validateResults,
     handleCreatePost
 ]
 
 export const updatePost = [
+    authorizeUser,
     (updatePostValidationSchema as any),
     validateResults,
     checkPostIdValidity,

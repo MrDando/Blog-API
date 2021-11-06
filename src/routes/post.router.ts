@@ -7,21 +7,21 @@ const router = express.Router();
 
 router.get('/', postController.getPosts)
 
-router.post('/', authorizeUser, postController.createPost)
+router.post('/', postController.createPost)
 
 router.get('/:postid', postController.getSinglePost)
 
-router.put('/:postid', authorizeUser, postController.updatePost)
+router.put('/:postid', postController.updatePost)
 
-router.delete('/:postid', authorizeUser, postController.deletePost)
+router.delete('/:postid', postController.deletePost)
 
 router.get('/:postid/comments', commentController.getComments)
 
-router.post('/:postid/comments', authorizeUser, commentController.createComment)
+router.post('/:postid/comments', commentController.createComment)
 
-router.put('/:postid/comments/:commentid', authorizeUser, commentController.editComment)
+router.put('/:postid/comments/:commentid', commentController.editComment)
 
-router.delete('/:postid/comments/:commentid', authorizeUser, commentController.deleteComment)
+router.delete('/:postid/comments/:commentid', commentController.deleteComment)
 
 
 

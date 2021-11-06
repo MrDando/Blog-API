@@ -6,6 +6,25 @@ import ApiError from '../errors/APIError'
 import User from '../models/user.model'
 import Post from '../models/post.model'
 
+export async function authenticateUser(req: Request, res: Response, next: NextFunction) {
+    const username = req.body.username
+    const inputPassword = req.body.password
+
+    try {
+        const user = await User.findOne({ username: username })
+
+        if (!user) { return next(ApiError.badRequest('Incorrect username'))}
+
+        const isPasswordValid = await user.comparePassword(inputPassword)
+        if (!isPasswordValid) { return next(ApiError.badRequest('Incorrect password'))}
+
+        res.locals.user = user
+        next()
+    } catch (err) {
+        return next(ApiError.internal('Internal server error'))
+    }
+}
+
 export function authorizeUser(req: Request, res: Response, next: NextFunction) {
     const token = extractJWT(req)
     if (!token) {

@@ -2,8 +2,8 @@ import { Request, Response, NextFunction} from 'express'
 import jwt from 'jsonwebtoken'
 
 import ApiError from '../errors/APIError'
+import { authenticateUser } from '../middleware/userMiddleware'
 import validateResults from '../middleware/validateResults'
-import authenticateUser from '../middleware/utils/authenticateUser'
 import User from '../models/user.model'
 import { signupValidationSchema, loginValidationSchema } from '../schemas/user.schemas'
 
@@ -28,28 +28,23 @@ export const signup = [
 export const login = [
     (loginValidationSchema as any),
     validateResults,
-    async function handleUserLogin (req: Request, res: Response, next: NextFunction) {
-        let { username, password } = req.body;
+    authenticateUser,
+    function handleUserLogin (req: Request, res: Response, next: NextFunction) {
+        const user = res.locals.user
+
+        if (!user) { return next(ApiError.internal('Internal server error')) }
     
-        const [ error, user, message ] = await authenticateUser(username, password)
-        if (error) { return next(error) } 
-        if (user) {
-            const userJWTData = {
-                sub: user.username,
-            }
-            const secret = process.env.ACCESS_TOKEN_SECRET
-            if (typeof secret !== 'undefined') {
-                const opts = {
-                    expiresIn: "7d"
-                }
-                const token = jwt.sign( userJWTData, secret, opts);
-                return res.status(200).json({
-                    message: "Auth Passed",
-                    token
-                })
-            }
+        const userJWTData = {
+            sub: user.username,
         }
-    
-        return res.status(401).json({ message })
+        const secret = process.env.ACCESS_TOKEN_SECRET
+        if (!secret) { return next(ApiError.internal('Internal server error')) }
+        
+        const opts = {
+            expiresIn: "7d"
+        }
+        const token = jwt.sign( userJWTData, secret, opts);
+        
+        return res.status(200).json({message: "Auth Passed", token })
     }
 ]

@@ -77,6 +77,18 @@ export const updatePost = [
     }
 ]
 
-export function deletePost(req: Request, res: Response) {
-    res.send('Delete post not implemented')
-}
+export const deletePost = [
+    authorizeUser,
+    checkPostIdValidity,
+    checkIfAuthorized('Post'),
+    function handlePostDelete(req: Request, res: Response, next: NextFunction) {
+        const post = res.locals.postOrComment
+        if (!post) { return next(ApiError.internal('Internal server error')) }
+
+        Post.findByIdAndDelete(post._id, {}, (err) => {
+            if (err) { return next(ApiError.internal('Internal server error')) }
+
+            res.send('Post deleted successfully')
+        })
+    }
+]

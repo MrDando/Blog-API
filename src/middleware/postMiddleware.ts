@@ -22,7 +22,7 @@ export async function handleGetSinglePost(req: Request, res: Response, next: Nex
 }
 
 export async function handleCreatePost (req: Request, res: Response, next: NextFunction) {
-    const JWTData = res.locals.user
+    const JWTData = res.locals.JWT
     const user = await User.findOne({ username: JWTData.sub })
     if (!user) { return next(ApiError.forbidden('Error validating token'))}
     if (!user.isCreator) { return next(ApiError.forbidden('User not authorized to create posts'))}

@@ -58,7 +58,7 @@ export function authorizeUser(req: Request, res: Response, next: NextFunction) {
             if(err) {
                 return next(ApiError.forbidden('Token is invalid'))
             }
-            res.locals.user = authData
+            res.locals.JWT = authData
             next()
         })
     }
@@ -66,7 +66,7 @@ export function authorizeUser(req: Request, res: Response, next: NextFunction) {
 
 export function checkIfAuthorized (objectType: "Post" | "Comment") {
     return async function (req: Request, res: Response, next: NextFunction) {
-        const JWTData = res.locals.user
+        const JWTData = res.locals.JWT
         try {
             const user = await User.findOne({ username: JWTData.sub })
             let postOrComment

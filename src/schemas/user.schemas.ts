@@ -10,6 +10,8 @@ export const signupValidationSchema = checkSchema({
             options: { checkFalsy: true },
             bail: true
         },
+        trim: {},
+        escape: {},
         isLength: {
             errorMessage: 'Username must contain at least 4 characters',
             options: { min: 4 },
@@ -27,9 +29,7 @@ export const signupValidationSchema = checkSchema({
                     }
                 })
             })
-        },
-        trim: {},
-        escape: {}
+        }
     },
     password: {
         in: ['body'],
@@ -38,15 +38,15 @@ export const signupValidationSchema = checkSchema({
             options: { checkFalsy: true },
             bail: true
         },
+        trim: {},
+        escape: {},
         isAlphanumeric: {
             errorMessage: 'Password can only contain letters and numbers'
         },
         isLength: {
             errorMessage: 'Password must contain at least 6 characters',
             options: { min: 6 },
-        },
-        trim: {},
-        escape: {}
+        }
     },
     passwordConfirm: {
         in: ['body'],

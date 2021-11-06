@@ -84,7 +84,8 @@ export function checkIfAuthorized (objectType: "Post" | "Comment") {
             const authorId = postOrComment.author._id.toString()
             const userId = user._id.toString()
             if (!(user.isAdmin || userId === authorId)) { return next(ApiError.forbidden('You are not authorized to update this post'))}
-    
+            res.locals.user = user
+            res.locals.postOrComment = postOrComment
             next()
         } catch (err) {
             return next(ApiError.internal('Internal server error'))

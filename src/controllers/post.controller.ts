@@ -60,7 +60,7 @@ export const updatePost = [
     (updatePostValidationSchema as any),
     validateResults,
     checkPostIdValidity,
-    checkIfAuthorized('Post'),
+    checkIfAuthorized('post'),
     function handlePostUpdate(req: Request, res: Response, next: NextFunction) {
         const user = res.locals.user
         const post = res.locals.postOrComment
@@ -80,7 +80,7 @@ export const updatePost = [
 export const deletePost = [
     authorizeUser,
     checkPostIdValidity,
-    checkIfAuthorized('Post'),
+    checkIfAuthorized('post'),
     function handlePostDelete(req: Request, res: Response, next: NextFunction) {
         const post = res.locals.postOrComment
         if (!post) { return next(ApiError.internal('Internal server error')) }

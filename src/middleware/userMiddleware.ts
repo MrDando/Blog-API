@@ -43,26 +43,29 @@ export function authorizeUser(req: Request, res: Response, next: NextFunction) {
     }
 }
 
-export function checkIfAuthorized (objectType: "Post" | "Comment") {
+export function checkIfAuthorized (objectType: "post" | "comment") {
     return async function (req: Request, res: Response, next: NextFunction) {
         const JWTData = res.locals.JWT
+        const action = req.method.toLowerCase()
+
         try {
             const user = await User.findOne({ username: JWTData.sub })
+
             let postOrComment
-            if (objectType = "Post") {
+            if (objectType === "post") {
                 postOrComment = await Post.findById(req.params.postid).populate('author', 'username')
             }
-            if (objectType = "Comment") {
-
+            if (objectType === "comment") {
                 // Currently does the same thing as post. Needs to be updated when Comment model is created.
                 postOrComment = await Post.findById(req.params.postid).populate('author', 'username')
             }
+
             if (!user) { return next(ApiError.forbidden('Error validating token'))}
-            if (!postOrComment) { return next(ApiError.notFound('Post with that id does not exist'))}
+            if (!postOrComment) { return next(ApiError.notFound(`The ${objectType} with that id does not exist`))}
     
             const authorId = postOrComment.author._id.toString()
             const userId = user._id.toString()
-            if (!(user.isAdmin || userId === authorId)) { return next(ApiError.forbidden('You are not authorized to update this post'))}
+            if (!(user.isAdmin || userId === authorId)) { return next(ApiError.forbidden(`You are not authorized to ${action} this ${objectType}`))}
             res.locals.user = user
             res.locals.postOrComment = postOrComment
             next()

@@ -53,3 +53,33 @@ export const createPostValidationSchema = checkSchema({
         }
     }
 })
+
+export const updatePostValidationSchema = checkSchema({
+    title: {
+        in: ['body'],
+        optional: { options: { nullable: true } },
+        isLength: {
+            errorMessage: 'Post title must contain at least 3 characters',
+            options: { min: 3 },
+        },
+        trim: {},
+        escape: {}
+    },
+    text: {
+        in: ['body'],
+        optional: { options: { nullable: true } },
+        isLength: {
+            errorMessage: 'Post body must contain at least 10 characters',
+            options: { min: 10 },
+        },
+        trim: {},
+        escape: {}
+    },
+    isPublished: {
+        in: ['body'],
+        optional: { options: { nullable: true } },
+        isBoolean: {
+            errorMessage: 'isPublished must be a boolean value',
+        }
+    }
+})

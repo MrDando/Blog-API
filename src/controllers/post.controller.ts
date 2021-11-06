@@ -1,6 +1,6 @@
 import { NextFunction, request, Request, Response } from "express";
 
-import { createPostValidationSchema } from '../schemas/post.schemas'
+import { createPostValidationSchema, updatePostValidationSchema } from '../schemas/post.schemas'
 import validateResults from '../middleware/validateResults'
 import { checkIfAuthorized } from '../middleware/userMiddleware'
 import { checkPostIdValidity, handleGetPosts, handleCreatePost, handleGetSinglePost } from '../middleware/postMiddleware'
@@ -22,6 +22,8 @@ export const createPost = [
 ]
 
 export const updatePost = [
+    (updatePostValidationSchema as any),
+    validateResults,
     checkPostIdValidity,
     checkIfAuthorized('Post'),
     function handlePostUpdate(req: Request, res: Response, next: NextFunction) {

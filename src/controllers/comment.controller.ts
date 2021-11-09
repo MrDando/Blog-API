@@ -7,7 +7,7 @@ import validateResults from '../middleware/validateResults'
 import Comment from '../models/comment.model'
 import Post from '../models/post.model'
 import User from '../models/user.model'
-import { createCommentValidationSchema } from '../schemas/comment.schemas'
+import { createCommentValidationSchema, updateCommentValidationSchema } from '../schemas/comment.schemas'
 
 export const getComments = [
     checkPostIdValidity,
@@ -55,6 +55,8 @@ export const createComment = [
 
 export const updateComment = [
     authorizeUser,
+    (updateCommentValidationSchema as any),
+    validateResults,
     checkPostIdValidity,
     checkCommentIdValidity,
     checkIfAuthorized('comment'),

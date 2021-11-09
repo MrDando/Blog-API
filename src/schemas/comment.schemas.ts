@@ -16,3 +16,20 @@ export const createCommentValidationSchema = checkSchema({
         }
     }
 })
+
+export const updateCommentValidationSchema = checkSchema({
+    text: {
+        in: ['body'],
+        exists: {
+            errorMessage: 'Comment body is required',
+            options: { checkFalsy: true },
+            bail: true
+        },
+        trim: {},
+        escape: {},
+        isLength: {
+            errorMessage: 'Comments have a max size of 500 characters',
+            options: { max: 500 },
+        }
+    }
+})

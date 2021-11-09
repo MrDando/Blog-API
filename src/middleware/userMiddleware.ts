@@ -3,6 +3,7 @@ import jwt from 'jsonwebtoken'
 
 import extractJWT from './utils/extractJWT'
 import ApiError from '../errors/APIError'
+import Comment from '../models/comment.model'
 import User from '../models/user.model'
 import Post from '../models/post.model'
 
@@ -56,8 +57,7 @@ export function checkIfAuthorized (objectType: "post" | "comment") {
                 postOrComment = await Post.findById(req.params.postid).populate('author', 'username')
             }
             if (objectType === "comment") {
-                // Currently does the same thing as post. Needs to be updated when Comment model is created.
-                postOrComment = await Post.findById(req.params.postid).populate('author', 'username')
+                postOrComment = await Comment.findById(req.params.commentid).populate('author', 'username')
             }
 
             if (!user) { return next(ApiError.forbidden('Error validating token'))}

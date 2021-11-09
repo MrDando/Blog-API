@@ -1,8 +1,8 @@
 import { Request, Response, NextFunction } from "express";
 
 import ApiError from "../errors/APIError";
-import { checkPostIdValidity } from '../middleware/checkDBIdValidity'
-import { authorizeUser } from '../middleware/userMiddleware'
+import { checkCommentIdValidity, checkPostIdValidity } from '../middleware/checkDBIdValidity'
+import { authorizeUser, checkIfAuthorized } from '../middleware/userMiddleware'
 import validateResults from '../middleware/validateResults'
 import Comment from '../models/comment.model'
 import Post from '../models/post.model'
@@ -53,9 +53,25 @@ export const createComment = [
     }
 ]
 
-export function editComment(req: Request, res: Response) {
-    res.send('Edit comment not implemented')
-}
+export const updateComment = [
+    authorizeUser,
+    checkPostIdValidity,
+    checkCommentIdValidity,
+    checkIfAuthorized('comment'),
+    function handleCommentUpdate (req: Request, res: Response, next: NextFunction) {
+        const comment = res.locals.postOrComment
+        if (!comment) { return next(ApiError.internal('Internal server error')) }
+
+        req.body._id = comment._id
+        const updatedComment = new Comment(req.body)
+
+        Comment.findByIdAndUpdate(comment._id, updatedComment, {}, (err) => {
+            if (err) { return next(ApiError.internal('Internal server error')) }
+
+            res.send('Comment updated successfully')
+        })
+    }
+]
 
 export function deleteComment(req: Request, res: Response) {
     res.send('Delete comment not implemented')

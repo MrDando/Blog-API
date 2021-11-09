@@ -19,7 +19,7 @@ router.get('/:postid/comments', commentController.getComments)
 
 router.post('/:postid/comments', commentController.createComment)
 
-router.put('/:postid/comments/:commentid', commentController.editComment)
+router.put('/:postid/comments/:commentid', commentController.updateComment)
 
 router.delete('/:postid/comments/:commentid', commentController.deleteComment)
 

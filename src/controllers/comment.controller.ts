@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 
 import ApiError from "../errors/APIError";
+import { checkPostIdValidity } from '../middleware/checkDBIdValidity'
 import { authorizeUser } from '../middleware/userMiddleware'
 import Comment from '../models/comment.model'
 import Post from '../models/post.model'
@@ -12,6 +13,7 @@ export function getComments(req: Request, res: Response) {
 
 export const createComment = [
     authorizeUser,
+    checkPostIdValidity,
     async function handleCreateComment(req: Request, res: Response, next: NextFunction) {
         const JWTData = res.locals.JWT
         const postId = req.params.postid

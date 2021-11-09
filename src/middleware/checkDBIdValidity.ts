@@ -7,3 +7,9 @@ export function checkPostIdValidity(req: Request, res: Response, next: NextFunct
     if (!id.match(/^[0-9a-fA-F]{24}$/)) { return next(ApiError.badRequest('Invalid post id')) }
     next()
 }
+
+export function checkCommentIdValidity(req: Request, res: Response, next: NextFunction) {
+    const id = req.params.commentid
+    if (!id.match(/^[0-9a-fA-F]{24}$/)) { return next(ApiError.badRequest('Invalid comment id')) }
+    next()
+}

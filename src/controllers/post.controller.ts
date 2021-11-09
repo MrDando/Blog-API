@@ -1,7 +1,7 @@
 import { NextFunction, request, Request, Response } from "express";
 
 import ApiError from "../errors/APIError";
-import { checkPostIdValidity } from '../middleware/postMiddleware'
+import { checkPostIdValidity } from '../middleware/checkDBIdValidity'
 import { authorizeUser, checkIfAuthorized } from '../middleware/userMiddleware'
 import validateResults from '../middleware/validateResults'
 import User from '../models/user.model'

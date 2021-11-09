@@ -4,14 +4,12 @@ interface IComment extends Document {
     text: string;
     author: any; // Add user object
     post: any; // Add post object
-    isPublished: boolean;
 }
 
 const CommentSchema = new Schema<IComment>({
     text: { type: String, required: true },
     author: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true},
-    post: { type: mongoose.Schema.Types.ObjectId, ref: "Post", required: true},
-    isPublished: { type: Boolean, required: true }},
+    post: { type: mongoose.Schema.Types.ObjectId, ref: "Post", required: true}},
     {
         timestamps: true,
     }

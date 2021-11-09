@@ -9,9 +9,20 @@ import Post from '../models/post.model'
 import User from '../models/user.model'
 import { createCommentValidationSchema } from '../schemas/comment.schemas'
 
-export function getComments(req: Request, res: Response) {
-    res.send('Get comments not implemented')
-}
+export const getComments = [
+    checkPostIdValidity,
+    async function handleGetComment(req: Request, res: Response, next: NextFunction) {
+        const postId = req.params.postid
+
+        const post = await Post.findById(postId)
+        const comments = await Comment.find({ post: postId })
+
+        if (!post) { return next(ApiError.badRequest('Post with that ID does not exist'))}
+        if (comments.length === 0) { return next(ApiError.notFound('Post does not have any comments'))}
+
+        res.json(comments)
+    }
+]
 
 export const createComment = [
     authorizeUser,

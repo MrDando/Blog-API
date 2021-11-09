@@ -3,9 +3,11 @@ import { Request, Response, NextFunction } from "express";
 import ApiError from "../errors/APIError";
 import { checkPostIdValidity } from '../middleware/checkDBIdValidity'
 import { authorizeUser } from '../middleware/userMiddleware'
+import validateResults from '../middleware/validateResults'
 import Comment from '../models/comment.model'
 import Post from '../models/post.model'
 import User from '../models/user.model'
+import { createCommentValidationSchema } from '../schemas/comment.schemas'
 
 export function getComments(req: Request, res: Response) {
     res.send('Get comments not implemented')
@@ -13,6 +15,8 @@ export function getComments(req: Request, res: Response) {
 
 export const createComment = [
     authorizeUser,
+    (createCommentValidationSchema as any),
+    validateResults,
     checkPostIdValidity,
     async function handleCreateComment(req: Request, res: Response, next: NextFunction) {
         const JWTData = res.locals.JWT

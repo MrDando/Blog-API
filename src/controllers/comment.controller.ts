@@ -75,6 +75,18 @@ export const updateComment = [
     }
 ]
 
-export function deleteComment(req: Request, res: Response) {
-    res.send('Delete comment not implemented')
-}
+export const deleteComment = [
+    authorizeUser,
+    checkCommentIdValidity,
+    checkIfAuthorized('comment'),
+    function handleCommentDelete(req: Request, res: Response, next: NextFunction) {
+        const comment = res.locals.postOrComment
+        if (!comment) { return next(ApiError.internal('Internal server error')) }
+
+        Comment.findByIdAndDelete(comment._id, {}, (err) => {
+            if (err) { return next(ApiError.internal('Internal server error'))}
+
+            res.send('Comment deleted successfully')
+        })
+    }
+]

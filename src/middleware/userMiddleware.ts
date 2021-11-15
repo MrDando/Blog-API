@@ -62,10 +62,15 @@ export function checkIfAuthorized (objectType: "post" | "comment") {
 
             if (!user) { return next(ApiError.forbidden('Error validating token'))}
             if (!postOrComment) { return next(ApiError.notFound(`The ${objectType} with that id does not exist`))}
-    
-            const authorId = postOrComment.author._id.toString()
+            
+            let authorId
+            if (postOrComment.author && postOrComment.author._id) {
+                authorId = postOrComment.author._id.toString()
+            }
+
             const userId = user._id.toString()
-            if (!(user.isAdmin || userId === authorId)) { return next(ApiError.forbidden(`You are not authorized to ${action} this ${objectType}`))}
+
+            if (!(user.isAdmin || (authorId && userId === authorId))) { return next(ApiError.forbidden(`You are not authorized to ${action} this ${objectType}`))}
             res.locals.user = user
             res.locals.postOrComment = postOrComment
             next()

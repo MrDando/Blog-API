@@ -69,19 +69,25 @@ export const updatePost = [
     validateResults,
     checkPostIdValidity,
     checkIfAuthorized('post'),
-    function handlePostUpdate(req: Request, res: Response, next: NextFunction) {
+    async function handlePostUpdate(req: Request, res: Response, next: NextFunction) {
         const user = res.locals.user
         const post = res.locals.postOrComment
         if (!user || !post) { return next(ApiError.internal('Internal server error')) }
 
         req.body._id = post._id
-        const updatedPost = new Post(req.body)
+        const postWithId = new Post(req.body)
 
-        Post.findByIdAndUpdate(post._id, updatedPost, {}, (err) => {
-            if (err) { return next(ApiError.internal('Internal server error')) }
+        try {
+            const updatedPost = await Post.findByIdAndUpdate(post._id, postWithId, { new: true })
 
-            res.send('Post updated successfully')
-        })
+            res.json({
+                message: "Post updated successfully", 
+                updatedPost
+            })
+
+        } catch (err) {
+            return next(ApiError.internal('Internal server error'))
+        }
     }
 ]
 

@@ -11,9 +11,12 @@ import { createPostValidationSchema, updatePostValidationSchema } from '../schem
 export const getPosts = [
     async function handleGetPosts(req: Request, res: Response, next: NextFunction) {
 
-    // ------------ Currently returns all posts regardless of whether they are published or not ------------
-    const posts = await Post.find().populate('author', 'username')
-    res.send(posts)
+        // ------------ Currently returns all posts regardless of whether they are published or not ------------
+        const posts = await Post.find().populate('author', 'username')
+        res.json({
+            message: "Posts sent successfully", 
+            posts
+        })
     }
 ]
 
@@ -23,7 +26,10 @@ export const getSinglePost = [
         try {
             const post = await Post.findById(req.params.postid).populate('author', 'username')
             if (!post) { return next(ApiError.notFound('Post with that id does not exist'))}
-            return res.send(post)
+            return res.json({
+                message: "Post sent successfully", 
+                post
+            })
         } catch (err){
             return next (ApiError.internal('Internal server error'))
         }
@@ -50,7 +56,9 @@ export const createPost = [
         post.save((err: any) => {
             if (err) { return next (ApiError.internal('Internal server error')) }
     
-            res.status(201).send('Post created successfully')
+            res.status(201).json({
+                message: "Post created successfully", 
+                post })
         })
     }
 ]

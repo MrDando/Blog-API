@@ -9,7 +9,7 @@ router.post('/login', userController.login)
 
 router.get('/', userController.getUsers)
 
-router.post('/', userController.changeUserRole)
+router.put('/:userid', userController.changeUserRole)
 
 router.post('/', userController.deleteUser)
 

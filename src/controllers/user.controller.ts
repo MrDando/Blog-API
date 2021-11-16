@@ -5,7 +5,7 @@ import ApiError from '../errors/APIError'
 import { authenticateUser, authorizeUser, checkIfAdmin } from '../middleware/userMiddleware'
 import validateResults from '../middleware/validateResults'
 import User from '../models/user.model'
-import { signupValidationSchema, loginValidationSchema } from '../schemas/user.schemas'
+import { signupValidationSchema, loginValidationSchema, updateRolesSchema } from '../schemas/user.schemas'
 
 export const signup = [
     (signupValidationSchema as any),
@@ -72,7 +72,26 @@ export const getUsers = [
 ]
 
 export const changeUserRole = [
-    
+    authorizeUser,
+    checkIfAdmin,
+    (updateRolesSchema as any),
+    validateResults,
+    async function handleChangeUserRole(req: Request, res: Response, next: NextFunction) {
+        const newRole = req.body
+        const userId = req.params.userid
+
+        try {
+            const updatedUser = await User.findByIdAndUpdate(userId, newRole, { new: true })
+
+            res.json({
+                message: "User role changed successfully",
+                user: updatedUser
+            })
+
+        } catch (err) {
+            return next(ApiError.internal('Internal server error'))
+        }
+    }
 ]
 
 export const deleteUser = [

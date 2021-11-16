@@ -75,3 +75,26 @@ export const loginValidationSchema = checkSchema({
         escape: {}
     }
 })
+
+export const updateRolesSchema = checkSchema({
+    isAdmin: {
+        in: ['body'],
+        exists: {
+            errorMessage: 'isAdmin is required',
+            bail: true
+        },
+        isBoolean: {
+            errorMessage: 'isAdmin need to be a boolean value'
+        }
+    },
+    isCreator: {
+        in: ['body'],
+        exists: {
+            errorMessage: 'isCreator is required',
+            bail: true
+        },
+        isBoolean: {
+            errorMessage: 'isCreator need to be a boolean value'
+        }
+    }
+})

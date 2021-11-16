@@ -16,10 +16,6 @@ export const signupValidationSchema = checkSchema({
             errorMessage: 'Username must contain at least 4 characters',
             options: { min: 4 },
         },
-        isAlphanumeric: {
-            errorMessage: 'Username can only contain letters and numbers',
-            bail: true
-        },
         custom: {
             errorMessage: 'Username already exists',
             options: ((username) => {
@@ -40,9 +36,6 @@ export const signupValidationSchema = checkSchema({
         },
         trim: {},
         escape: {},
-        isAlphanumeric: {
-            errorMessage: 'Password can only contain letters and numbers'
-        },
         isLength: {
             errorMessage: 'Password must contain at least 6 characters',
             options: { min: 6 },

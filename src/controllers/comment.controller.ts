@@ -20,7 +20,10 @@ export const getComments = [
         if (!post) { return next(ApiError.badRequest('Post with that ID does not exist'))}
         if (comments.length === 0) { return next(ApiError.notFound('Post does not have any comments'))}
 
-        res.json(comments)
+        res.json({
+            message: "Comments sent successfully",
+            comments
+        })
     }
 ]
 
@@ -45,11 +48,16 @@ export const createComment = [
             post: post.id,
         })
 
-        comment.save((err: any) => {
-            if (err) { return next (ApiError.internal('Internal server error')) }
+        try {
+            const newComment = await comment.save()
+            res.status(201).json({
+                message: 'Comment created successfully',
+                comment: newComment
+            })
 
-            res.status(201).send('Comment created successfully')
-        })
+        } catch (err) {
+            return next (ApiError.internal('Internal server error'))
+        }
     }
 ]
 
@@ -60,18 +68,23 @@ export const updateComment = [
     checkPostIdValidity,
     checkCommentIdValidity,
     checkIfAuthorized('comment'),
-    function handleCommentUpdate (req: Request, res: Response, next: NextFunction) {
+    async function handleCommentUpdate (req: Request, res: Response, next: NextFunction) {
         const comment = res.locals.postOrComment
         if (!comment) { return next(ApiError.internal('Internal server error')) }
 
         req.body._id = comment._id
-        const updatedComment = new Comment(req.body)
+        const commentWithId = new Comment(req.body)
 
-        Comment.findByIdAndUpdate(comment._id, updatedComment, {}, (err) => {
-            if (err) { return next(ApiError.internal('Internal server error')) }
+        try {
+            const updatedComment = await Comment.findByIdAndUpdate(comment._id, commentWithId, { new: true })
+            res.json({
+                message: "Comment updated successfully", 
+                comment: updatedComment
+            })
 
-            res.send('Comment updated successfully')
-        })
+        } catch (err) {
+            return next(ApiError.internal('Internal server error'))
+        }
     }
 ]
 
@@ -86,7 +99,9 @@ export const deleteComment = [
         Comment.findByIdAndDelete(comment._id, {}, (err) => {
             if (err) { return next(ApiError.internal('Internal server error'))}
 
-            res.send('Comment deleted successfully')
+            res.json({
+                message: "Comment deleted successfully"
+            })
         })
     }
 ]

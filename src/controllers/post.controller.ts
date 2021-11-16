@@ -105,7 +105,9 @@ export const deletePost = [
         Post.findByIdAndDelete(post._id, {}, (err) => {
             if (err) { return next(ApiError.internal('Internal server error')) }
 
-            res.send('Post deleted successfully')
+            res.json({
+                message: "Post deleted successfully"
+            })
         })
     }
 ]

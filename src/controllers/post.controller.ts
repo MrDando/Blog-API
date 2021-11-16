@@ -85,7 +85,7 @@ export const updatePost = [
 
             res.json({
                 message: "Post updated successfully", 
-                updatedPost
+                post: updatedPost
             })
 
         } catch (err) {

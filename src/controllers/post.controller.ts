@@ -52,14 +52,17 @@ export const createPost = [
             author: user._id,
             isPublished: req.body.isPublished
         })
-    
-        post.save((err: any) => {
-            if (err) { return next (ApiError.internal('Internal server error')) }
-    
+        
+        try {
+            const newPost = await post.save()
+
             res.status(201).json({
                 message: "Post created successfully", 
-                post })
-        })
+                post: newPost })
+
+        } catch (err) {
+            return next (ApiError.internal('Internal server error'))
+        }
     }
 ]
 

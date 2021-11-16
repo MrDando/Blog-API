@@ -79,3 +79,16 @@ export function checkIfAuthorized (objectType: "post" | "comment") {
         }
     }
 }
+
+export async function checkIfAdmin(req: Request, res: Response, next: NextFunction) {
+    const JWTData = res.locals.JWT
+    
+    try {
+        const user = await User.findOne({ username: JWTData.sub })
+
+        if (!user || !user.isAdmin) { return next(ApiError.forbidden('Your are not authorized for this action'))}
+        next()
+    } catch (err) {
+        return next(ApiError.internal('Internal server error'))
+    }
+}

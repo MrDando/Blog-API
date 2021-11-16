@@ -2,7 +2,7 @@ import { Request, Response, NextFunction} from 'express'
 import jwt from 'jsonwebtoken'
 
 import ApiError from '../errors/APIError'
-import { authenticateUser } from '../middleware/userMiddleware'
+import { authenticateUser, authorizeUser, checkIfAdmin } from '../middleware/userMiddleware'
 import validateResults from '../middleware/validateResults'
 import User from '../models/user.model'
 import { signupValidationSchema, loginValidationSchema } from '../schemas/user.schemas'
@@ -51,4 +51,30 @@ export const login = [
             message: "User logged in successfully", 
             token })
     }
+]
+
+export const getUsers = [
+    authorizeUser,
+    checkIfAdmin,
+    async function handleGetUsers(req: Request, res: Response, next: NextFunction) {
+        try {
+            const users = await User.find()
+
+            res.json({
+                message: "Users sent successfully",
+                users
+            })
+
+        } catch (err) {
+            return next(ApiError.internal('Internal server error'))
+        }
+    }
+]
+
+export const changeUserRole = [
+    
+]
+
+export const deleteUser = [
+    
 ]

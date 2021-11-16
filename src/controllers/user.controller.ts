@@ -20,7 +20,9 @@ export const signup = [
         user.save((err: any) => {
             if (err) { return next (ApiError.internal('Internal server error')) }
     
-            res.status(201).send('User created successfully')
+            res.status(201).json({
+                message: "User created successfully"
+            })
         })
     }
 ]
@@ -45,6 +47,8 @@ export const login = [
         }
         const token = jwt.sign( userJWTData, secret, opts);
         
-        return res.status(200).json({message: "Auth Passed", token })
+        return res.status(200).json({
+            message: "User logged in successfully", 
+            token })
     }
 ]

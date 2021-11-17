@@ -2,6 +2,7 @@ import { Request, Response, NextFunction} from 'express'
 import jwt from 'jsonwebtoken'
 
 import ApiError from '../errors/APIError'
+import { checkUserIdValidity } from '../middleware/checkDBIdValidity'
 import { authenticateUser, authorizeUser, checkIfAdmin } from '../middleware/userMiddleware'
 import validateResults from '../middleware/validateResults'
 import User from '../models/user.model'
@@ -95,5 +96,25 @@ export const changeUserRole = [
 ]
 
 export const deleteUser = [
-    
+    authorizeUser,
+    checkIfAdmin, // Currently only admin can delete users
+    checkUserIdValidity,
+    async function handleDeleteUser(req: Request, res: Response, next: NextFunction) {
+        const userId = req.params.userid
+
+        try {
+            const user = await User.findByIdAndDelete(userId)
+
+            if(!user) { return next(ApiError.badRequest('User with that Id does not exist'))}
+
+            res.json({
+                message: "User deleted successfully",
+                user
+            })
+
+        } catch (err) {
+            console.log(err)
+            return next(ApiError.internal('Internal server error'))
+        }
+    }
 ]

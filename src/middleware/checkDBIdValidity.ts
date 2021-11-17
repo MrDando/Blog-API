@@ -13,3 +13,9 @@ export function checkCommentIdValidity(req: Request, res: Response, next: NextFu
     if (!id.match(/^[0-9a-fA-F]{24}$/)) { return next(ApiError.badRequest('Invalid comment id')) }
     next()
 }
+
+export function checkUserIdValidity(req: Request, res: Response, next: NextFunction) {
+    const id = req.params.userid
+    if (!id.match(/^[0-9a-fA-F]{24}$/)) { return next(ApiError.badRequest('Invalid user id')) }
+    next()
+}

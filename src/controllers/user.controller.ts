@@ -11,20 +11,24 @@ import { signupValidationSchema, loginValidationSchema, updateRolesSchema } from
 export const signup = [
     (signupValidationSchema as any),
     validateResults,
-    function handleUserSignup (req: Request, res: Response, next: NextFunction) {
+    async function handleUserSignup (req: Request, res: Response, next: NextFunction) {
 
         const user = new User({
             username: req.body.username,
             password: req.body.password
         })
-        
-        user.save((err: any) => {
-            if (err) { return next (ApiError.internal('Internal server error')) }
-    
+
+        try {
+            const newUser = await user.save()
+
             res.status(201).json({
-                message: "User created successfully"
+                message: "User created successfully",
+                userId: newUser._id
             })
-        })
+
+        } catch (err) {
+            return next (ApiError.internal('Internal server error'))
+        }
     }
 ]
 

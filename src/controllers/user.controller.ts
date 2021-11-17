@@ -88,6 +88,8 @@ export const changeUserRole = [
         try {
             const updatedUser = await User.findByIdAndUpdate(userId, newRole, { new: true })
 
+            if (!updatedUser) { return next(ApiError.notFound('User with that Id does not exist'))}
+
             res.json({
                 message: "User role changed successfully",
                 user: updatedUser

@@ -2,7 +2,7 @@ import { Request, Response, NextFunction} from 'express'
 import jwt from 'jsonwebtoken'
 
 import ApiError from '../errors/APIError'
-import { checkUserIdValidity } from '../middleware/checkDBIdValidity'
+import checkIdValidity from '../middleware/checkDBIdValidity'
 import { authenticateUser, authorizeUser, checkIfAdmin } from '../middleware/userMiddleware'
 import validateResults from '../middleware/validateResults'
 import User from '../models/user.model'
@@ -104,7 +104,7 @@ export const changeUserRole = [
 export const deleteUser = [
     authorizeUser,
     checkIfAdmin, // Currently only admin can delete users
-    checkUserIdValidity,
+    checkIdValidity('user'),
     async function handleDeleteUser(req: Request, res: Response, next: NextFunction) {
         const userId = req.params.userid
 

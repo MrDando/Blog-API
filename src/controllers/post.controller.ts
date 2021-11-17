@@ -1,7 +1,7 @@
 import { NextFunction, request, Request, Response } from "express";
 
 import ApiError from "../errors/APIError";
-import { checkPostIdValidity } from '../middleware/checkDBIdValidity'
+import checkIdValidity from '../middleware/checkDBIdValidity'
 import { authorizeUser, checkIfAuthorized } from '../middleware/userMiddleware'
 import validateResults from '../middleware/validateResults'
 import User from '../models/user.model'
@@ -21,7 +21,7 @@ export const getPosts = [
 ]
 
 export const getSinglePost = [
-    checkPostIdValidity,
+    checkIdValidity('post'),
     async function handleGetSinglePost(req: Request, res: Response, next: NextFunction) {
         try {
             const post = await Post.findById(req.params.postid).populate('author', 'username')
@@ -70,7 +70,7 @@ export const updatePost = [
     authorizeUser,
     (updatePostValidationSchema as any),
     validateResults,
-    checkPostIdValidity,
+    checkIdValidity('post'),
     checkIfAuthorized('post'),
     async function handlePostUpdate(req: Request, res: Response, next: NextFunction) {
         const user = res.locals.user
@@ -96,7 +96,7 @@ export const updatePost = [
 
 export const deletePost = [
     authorizeUser,
-    checkPostIdValidity,
+    checkIdValidity('post'),
     checkIfAuthorized('post'),
     function handlePostDelete(req: Request, res: Response, next: NextFunction) {
         const post = res.locals.postOrComment

@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 
 import ApiError from "../errors/APIError";
-import { checkCommentIdValidity, checkPostIdValidity } from '../middleware/checkDBIdValidity'
+import checkIdValidity from '../middleware/checkDBIdValidity'
 import { authorizeUser, checkIfAuthorized } from '../middleware/userMiddleware'
 import validateResults from '../middleware/validateResults'
 import Comment from '../models/comment.model'
@@ -10,7 +10,7 @@ import User from '../models/user.model'
 import { createCommentValidationSchema, updateCommentValidationSchema } from '../schemas/comment.schemas'
 
 export const getComments = [
-    checkPostIdValidity,
+    checkIdValidity('post'),
     async function handleGetComment(req: Request, res: Response, next: NextFunction) {
         const postId = req.params.postid
 
@@ -31,7 +31,7 @@ export const createComment = [
     authorizeUser,
     (createCommentValidationSchema as any),
     validateResults,
-    checkPostIdValidity,
+    checkIdValidity('post'),
     async function handleCreateComment(req: Request, res: Response, next: NextFunction) {
         const JWTData = res.locals.JWT
         const postId = req.params.postid
@@ -65,8 +65,8 @@ export const updateComment = [
     authorizeUser,
     (updateCommentValidationSchema as any),
     validateResults,
-    checkPostIdValidity,
-    checkCommentIdValidity,
+    checkIdValidity('post'),
+    checkIdValidity('comment'),
     checkIfAuthorized('comment'),
     async function handleCommentUpdate (req: Request, res: Response, next: NextFunction) {
         const comment = res.locals.postOrComment
@@ -90,7 +90,8 @@ export const updateComment = [
 
 export const deleteComment = [
     authorizeUser,
-    checkCommentIdValidity,
+    checkIdValidity('post'),
+    checkIdValidity('comment'),
     checkIfAuthorized('comment'),
     function handleCommentDelete(req: Request, res: Response, next: NextFunction) {
         const comment = res.locals.postOrComment

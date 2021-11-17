@@ -2,20 +2,12 @@ import { Request, Response, NextFunction } from 'express'
 
 import ApiError from '../errors/APIError'
 
-export function checkPostIdValidity(req: Request, res: Response, next: NextFunction) {
-    const id = req.params.postid
-    if (!id.match(/^[0-9a-fA-F]{24}$/)) { return next(ApiError.badRequest('Invalid post id')) }
-    next()
-}
+export default function checkIdValidity(type: 'post' | 'comment' | 'user') {
+    return function (req: Request, res: Response, next: NextFunction) {
+        const idParam = `${type}id`
+        const id = req.params[idParam]
 
-export function checkCommentIdValidity(req: Request, res: Response, next: NextFunction) {
-    const id = req.params.commentid
-    if (!id.match(/^[0-9a-fA-F]{24}$/)) { return next(ApiError.badRequest('Invalid comment id')) }
-    next()
-}
-
-export function checkUserIdValidity(req: Request, res: Response, next: NextFunction) {
-    const id = req.params.userid
-    if (!id.match(/^[0-9a-fA-F]{24}$/)) { return next(ApiError.badRequest('Invalid user id')) }
-    next()
+        if (!id.match(/^[0-9a-fA-F]{24}$/)) { return next(ApiError.badRequest(`Invalid ${type} id`)) }
+        next()  
+    }
 }

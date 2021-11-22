@@ -13,8 +13,8 @@ export const createPostValidationSchema = checkSchema({
         trim: {},
         escape: {},
         isLength: {
-            errorMessage: 'Post title must contain at least 3 characters',
-            options: { min: 3 },
+            errorMessage: 'Post title must be between 3 and 50 characters long',
+            options: { min: 3, max: 50 },
         },
         custom: {
             errorMessage: 'Post with that title already exists',
@@ -61,8 +61,8 @@ export const updatePostValidationSchema = checkSchema({
         trim: {},
         escape: {},
         isLength: {
-            errorMessage: 'Post title must contain at least 3 characters',
-            options: { min: 3 },
+            errorMessage: 'Post title must be between 3 and 50 characters long',
+            options: { min: 3, max: 50 },
         }
     },
     text: {

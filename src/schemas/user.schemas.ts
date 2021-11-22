@@ -13,8 +13,8 @@ export const signupValidationSchema = checkSchema({
         trim: {},
         escape: {},
         isLength: {
-            errorMessage: 'Username must contain at least 4 characters',
-            options: { min: 4 },
+            errorMessage: 'Username must be longer than 3 and shorter than 30 characters',
+            options: { min: 4, max: 30},
         },
         custom: {
             errorMessage: 'Username already exists',

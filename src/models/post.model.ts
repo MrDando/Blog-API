@@ -8,9 +8,9 @@ interface IPost extends Document {
 }
 
 const PostSchema = new Schema<IPost>({
-    title: { type: String, required: true },
-    text: { type: String, required: true },
-    author: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true},
+    title: { type: String, required: true, minlength: 3, maxlength: 50 },
+    text: { type: String, required: true, minlength: 10 },
+    author: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
     isPublished: { type: Boolean, required: true }},
     {
         timestamps: true,
